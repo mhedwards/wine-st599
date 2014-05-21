@@ -6,3 +6,16 @@
 
 # R data files from past sessions
 .Rdata
+.Rproj.user
+
+*.Rproj
+
+
+# Extra Latex Files
+*.log
+*.synctex.gz
+*.aux
+*.nav
+*.out
+*.toc
+*concordance.tex
