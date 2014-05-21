@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+
+
+
+``I commit to a timely response to e-mail discussions, specifically, within 24 hours."
+
+``I will commit to timely progress on individual tasks, and will inform the group if that is not possible, or difficulty arises."
+
+``I will show up to analog meetings on time, and will contact the group if that is not possible."
+
+``I will make every effort to give sufficient warning of an absence so that rescheduling is possible."
+
+``I will speak up if I do not understand a task or am worried it is beyond my capabilities/time."
+
+
+Kalbi- Recorder -  zongok@onid.orst.edu 
+Gina - Checker gina.shellhammer@gmail.com 
+Song Hua - Monitor - choiso@onid.orst.edu 
+Matt - Coordinator - edwarmat@onid.oregonstate.edu 
+
+\end{document}
