@@ -91,3 +91,8 @@ white.train <- filter(white.sort, !row_id %in% samp_id.w) # 3058 obs
 # write to file.
 write.csv(white.samp, "data/whitewine-testset.csv", row.names=FALSE )
 write.csv(white.train, "data/whitewine-trainingset.csv", row.names=FALSE)
+
+# --- Combined Graph to Save ---
+par(mfrow=c(2,1))
+hist(red.q, xlim=c(0,10), main="Red Wine: Quality", xlab="Quality")
+hist(white.q, xlim=c(0,10), main="White Wine: Quality", xlab="Quality")
