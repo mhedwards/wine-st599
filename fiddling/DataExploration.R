@@ -1,8 +1,8 @@
 ### Code Exploration & Clean up
 library(sampling)
 library(dplyr)
+library(MASS)
 # The original files were in *.csv format, but were actually delimited with semi colons ; instead of commas. Opened files in Excel, and convered to actual Comma delimited files. These are the "winequality-red-new" and "winequality-white-new" files.
-
 
 redwine <- read.csv("data/winequality-red-new.csv", header=T, stringsAsFactors=F)
 nrow(redwine) #1599 rows of data
@@ -45,7 +45,7 @@ head(redwine.samp)
 red.samp <- filter(redwine.sort, row_id %in% samp_ids) # 602
 red.training <- filter(redwine.sort, !row_id %in% samp_ids)  #997
 # 602+997=1599
-
+head(red.training)
 # save to files.
 write.csv(red.samp, "data/redwine-testset.csv", row.names=FALSE )
 write.csv(red.training, "data/redwine-trainingset.csv", row.names=FALSE)
@@ -96,3 +96,50 @@ write.csv(white.train, "data/whitewine-trainingset.csv", row.names=FALSE)
 par(mfrow=c(2,1))
 hist(red.q, xlim=c(0,10), main="Red Wine: Quality", xlab="Quality")
 hist(white.q, xlim=c(0,10), main="White Wine: Quality", xlab="Quality")
+
+#########GS additions to Matt's exploratory analysis
+pairs(redwine)
+
+cor(redwine[,unlist(lapply(mtcars, is.numeric))])
+## highly collinear variables will be problematic. 
+## one idea is to do principle component ordinal regression.
+##Basically doing ordinal regression with the PC's of a pca to get the variables
+#orthogonal and eliminat multicollinearity.
+
+
+#######pca
+redwine.trainingset <- read.csv("data/redwine-trainingset.csv", header=T, stringsAsFactors=F)
+red.y<-redwine.trainingset$quality
+head(redwine.trainingset)
+red.preds<-redwine.trainingset[,1:11]
+
+pca.red<-prcomp(red.preds, scale = TRUE)
+summary(pca.red)
+##graph of pca
+biplot(pca.red, choices = 1:2, main ="PCA of Predictor Variables")
+
+library(ggplot2)
+qplot(pca.red$x[,1],pca.red$x[,2], main="Scores of PC1 and PC2 of scaled Red Wine Data")
+
+#looking at ordinal regression with pcs
+pcr.red.5<-polr(as.factor(redwine.trainingset$quality)~pca.red$x[,1] + 
+                  pca.red$x[,2]  + pca.red$x[,3] + pca.red$x[,4] + pca.red$x[,5])
+pcr.red.4<-polr(as.factor(redwine.trainingset$quality)~pca.red$x[,1] + 
+                  pca.red$x[,2]  + pca.red$x[,3] + pca.red$x[,4])
+pcr.red.3<-polr(as.factor(redwine.trainingset$quality)~pca.red$x[,1] + 
+                  pca.red$x[,2]  + pca.red$x[,3])
+pcr.red.2<-polr(as.factor(redwine.trainingset$quality)~pca.red$x[,1] + 
+                  pca.red$x[,2])
+pcr.red.1<-polr(as.factor(redwine.trainingset$quality)~pca.red$x[,1] )
+summary(pcr.red.1)
+summary(pcr.red.2)
+summary(pcr.red.3)
+summary(pcr.red.4)
+summary(pcr.red.5)
+
+##lowest AIC/BIC looks like pcr with 3 pc's ## This may be a start.
+AIC(pcr.red.1, pcr.red.2, pcr.red.3, pcr.red.4, pcr.red.5)
+BIC(pcr.red.1, pcr.red.2, pcr.red.3, pcr.red.4, pcr.red.5)
+
+# This makes sense why you selected PCA- multivariate responses..
+
