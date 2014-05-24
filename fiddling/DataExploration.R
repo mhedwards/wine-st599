@@ -10,6 +10,15 @@ nrow(redwine) #1599 rows of data
 whitewine <- read.csv("data/winequality-white-new.csv", header=T, stringsAsFactors=F)
 nrow(whitewine) #4898 rows of data.
 
+library(ggplot2)
+ggplot()+geom_bar(data=whitewine, aes(factor(quality)), fill="white", color="black")+xlab("Quality")+ylab("Count")+theme_bw(18)+
+  geom_text(data=whitewine,stat="bin", aes(factor(quality), y=..count..+75, label=..count..))
+
+ggplot()+geom_bar(data=whitewine, aes(factor(quality)), fill=rgb(243/255,115/255,33/255))+xlab("Quality")+ylab("Count")+theme_bw(18)+
+  geom_text(data=whitewine,stat="bin", aes(factor(quality), y=..count..+75, label=..count..))
+
+ggsave("images/white_hist.pdf", width=6, height=4)
+
 
 # ----- REd Wine -----
 red.q <- redwine$quality
