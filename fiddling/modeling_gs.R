@@ -48,5 +48,6 @@ white.test$predict<-round(predicted)
 
 sum(white.test$predict == white.test$quality)
 table(white.test$predict == white.test$quality)
-with(white.test, table(white.test$predict == white.test$quali
+##53% prediction == not so great
+
 

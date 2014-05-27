@@ -44,7 +44,7 @@ AIC(pcr.red.1, pcr.red.2, pcr.red.3, pcr.red.4, pcr.red.5)
 BIC(pcr.red.1, pcr.red.2, pcr.red.3, pcr.red.4, pcr.red.5)
 
 #####redo with white data set
-whitewine<-read.csv("/Users/Babydoll/Documents/BigData/wine-st599/data/whitewine-trainingset.csv", header= TRUE)
+white<-read.csv("/Users/Babydoll/Documents/BigData/wine-st599/data/whitewine-trainingset.csv", header= TRUE)
 
 pairs(whitewine)
 
@@ -93,27 +93,22 @@ BIC(pcr.white.1, pcr.white.2, pcr.white.3, pcr.white.4, pcr.white.5, pcr.white.6
 or.white.5<-polr(as.factor(whitewine$quality)~fixed.acidity + volatile.acidity + citric.acid + 
                    residual.sugar + chlorides + total.sulfur.dioxide + density +   pH +
                    sulphates + alcohol + free.sulfur.dioxide, data = white)
-if(require(MASS)) { ## dropterm, stepAIC, 
- or1 <- polr(as.factor(whitewine$quality)~fixed.acidity + volatile.acidity + citric.acid + 
-               residual.sugar + chlorides + total.sulfur.dioxide + density +   pH +
-               sulphates + alcohol + free.sulfur.dioxide, data = whitewine)
-  dropterm(m1, test = "Chi")
-  or3<- stepAIC(or1)
-  summary(or3)
-}
-###on scaled data 
-white.y<-white$quality
-head(white)
 
-white.x<-scale(white[,1:11])
+###Multinomial regression
+white.test<-read.csv("/Users/Babydoll/Documents/BigData/wine-st599/data/whitewine-testset.csv", header= TRUE)
+head(white.test)
 
-wwscale<-as.data.frame(cbind(white.y, white.x))
-head(wwscale)
 if(require(MASS)) { ## dropterm, stepAIC, 
-  or1 <- polr(as.factor(white.y)~fixed.acidity + volatile.acidity + citric.acid + 
+  or1 <- polr(as.factor(quality)~fixed.acidity + volatile.acidity + citric.acid + 
                 residual.sugar + chlorides + total.sulfur.dioxide + density +   pH +
-                sulphates + alcohol + free.sulfur.dioxide, data = wwscale)
+                sulphates + alcohol + free.sulfur.dioxide, data = white)
   dropterm(m1, test = "Chi")
   or3<- stepAIC(or1)
   summary(or3)
 }
+predict(or3,  white[1:10,])
+predict(or3,  white.test)
+
+white.test$predict.or<-predict(or3,  newdata = white.test)
+table(white.test$predict.or== white.test$quality)
+## predicts at 53% not any better than MLR
