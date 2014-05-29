@@ -1,8 +1,7 @@
 
 #########GS additions to Matt's exploratory analysis
 pairs(redwine)
-
-cor(redwine[,unlist(lapply(mtcars, is.numeric))])
+#cor(redwine[,unlist(lapply(mtcars, is.numeric))])
 ## highly collinear variables will be problematic. 
 ## one idea is to do principle component ordinal regression.
 ##Basically doing ordinal regression with the PC's of a pca to get the variables
@@ -90,7 +89,7 @@ AIC(pcr.white.1, pcr.white.2, pcr.white.3, pcr.white.4, pcr.white.5, pcr.white.6
 BIC(pcr.white.1, pcr.white.2, pcr.white.3, pcr.white.4, pcr.white.5, pcr.white.6)
 ## looks like regression with 5 pcs has lowest BIC.
 ## ordianl regerssion using raw data
-or.white.5<-polr(as.factor(whitewine$quality)~fixed.acidity + volatile.acidity + citric.acid + 
+#or.white.5<-polr(as.factor(whitewine$quality)~fixed.acidity + volatile.acidity + citric.acid + 
                    residual.sugar + chlorides + total.sulfur.dioxide + density +   pH +
                    sulphates + alcohol + free.sulfur.dioxide, data = white)
 
