@@ -67,18 +67,40 @@
 	\item Why: Ensure representation of all quality categories in both Training \& Testing datasets.
 	\item[]
 	\item How: 37.5\% of items (rounded up) in strata were randomly selected to be in the testing set. Remaining 62.5\% were the training set.
-	\item[]
-	\item Same training \& testing sets used for each analysis type.
 	\end{itemize}
 \end{frame}
 
+\begin{frame}{Multiple Linear Regression}
 
-\begin{frame}{Regression}
-content...
+
+\begin{enumerate}
+\item 
+\end{enumerate}
+Multiple Linear Regression
+K-Nearest Neighbor Regression
+
+Model selection, forward/backward, all gave same model. 
+
+
+\end{frame}
+
+\begin{frame}{K-Means Regression}
+Multiple Linear Regression
+K-Nearest Neighbor Regression
+
+Model selection, forward/backward, all gave same model. 
+
+
 \end{frame}
 
 \begin{frame}{Classification}
-content...
+Logistic regression used as classifcation to predict category 
+
+Split data into 3 sets: Training, Cross-Validation, Test Set - completely new. 
+
+polynomial logisitc regression, fit 4 degree poly nomial model, fit a shrink parameter tried 12 to avoid overfitting. estimated the training set error, picked the best and tried it on the cross validation set. then used that parameter to predict with the test set. 
+
+
 \end{frame}
 
 \begin{frame}{Random Randomness is Random}
@@ -99,8 +121,12 @@ content...
 % -------------------------------- FINDINGS --------------------------------------------------
 \section{Findings}
 
-\begin{frame}{Regression: 50\% Success Rate}
+\begin{frame}{Regression: 60\% Success Rate}
 content... change success rate in title
+
+
+todo: graphic for kmeans and multiple or ordinal regression
+
 \end{frame}
 
 \begin{frame}{Classification: 50\% Success Rate}
@@ -120,7 +146,14 @@ content... change success rate in title
 % -------------------------------- DISCUSSION --------------------------------------------------
 \section{Discussion}
 \begin{frame}{}
-content...
+Cross Validation
+
+Search method for \texttt{knn}
+
+Ordinal Regression - must assume that 
+ordered categories - assumption about ordering of categories has some repercussions.
+
+Ordinal Regression: proportional odds - coefficients stay the same, and the intercept value changes. all explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
 
 \end{frame}
 \end{document}
