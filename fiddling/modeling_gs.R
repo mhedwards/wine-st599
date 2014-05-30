@@ -37,18 +37,18 @@ alc<-1.307144e-01
 fsd<-2.248178e-03
 m3$coef
 white.test<-read.csv("/Users/Babydoll/Documents/BigData/wine-st599/data/whitewine-testset.csv", header = TRUE)
-white.test$Int<-1.945886e+02
+white.test$Int1<-1.945886e+02
 
 
-predicted = (white.test$Int +(white.test$fixed.acidity*fa)+ (white.test$volatile.acidity*va)+
+predicted = (white.test$Int1 +(white.test$fixed.acidity*fa)+ (white.test$volatile.acidity*va)+
   (white.test$residual.sugar*resug) + (white.test$density*dens) + (white.test$pH*ph) + 
   (white.test$sulphates*sul) + (white.test$alcoho*alc)+ (white.test$free.sulfur.dioxide*fsd))
 ##OK now to test
 ## just using a blunt instrument here. I may want to look at 6-6.75 as 6 and above 6.75 as 7.
-white.test$predict<-round(predicted)
+white.test$pred.mlr<-round(predicted)
 
-sum(white.test$predict == white.test$quality)
-table(white.test$predict == white.test$quality)
+sum(white.test$pred.mlr == white.test$quality)
+table(white.test$pred.mlr == white.test$quality)
 ##53% prediction == not so great
 
 ##trying other model selection techniques
@@ -103,52 +103,75 @@ library(rminer)
 M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
         residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
         sulphates + alcohol +free.sulfur.dioxide,data=white,model="knn",search="heuristic")
-P=predict(M,white.test) # P should be negative...
+P=predict(M,white.test) 
 P
-white.test$predict1<-round(P)
+white.test$pred.knn<-round(P)
 
-sum(white.test$predict1 == white.test$quality)
-table(white.test$predict1 == white.test$quality)
+sum(white.test$pred.knn == white.test$quality)
+table(white.test$pred.knn == white.test$quality)
+
 ##using k nearest neighbors got 60%
-M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
-        residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
-        sulphates + alcohol +free.sulfur.dioxide,data=white,model="knn",search="heuristic")
-P=predict(M,white.test) # P should be negative...
-P
-white.test$predict1<-round(P)
-
-sum(white.test$predict1 == white.test$quality)
-table(white.test$predict1 == white.test$quality)
-##got same
-##try linear discriminate analysis
+##try linear discriminate analysis got 60%
 M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
         residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
         sulphates + alcohol +free.sulfur.dioxide,data=white,model="lda",search="heuristic")
 P=predict(M,white.test) 
 P
-white.test$predict1<-round(P)
+white.test$pred.lda<-round(P)
 
-sum(white.test$predict1 == white.test$quality)
-table(white.test$predict1 == white.test$quality)
+sum(white.test$pred.lda == white.test$quality)
+table(white.test$pred.lda == white.test$quality)
 
-##try naive got 825 T and 1015 F (BAD!!)
-##try dt 935 T and 905 F
 ##try multilayer perceptron with one hidden layer got 1035 T and 805 F
-## try multilayer percpetron ensemble got 1042 T and 798 F == 57%
-##try sv got 1012 T and 828 F same as randomForest
+M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
+        residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
+        sulphates + alcohol +free.sulfur.dioxide,data=white,model="mlp",search="heuristic")
+P=predict(M,white.test) 
+P
+white.test$pred.mlp<-round(P)
 
+sum(white.test$pred.lda == white.test$quality)
+table(white.test$pred.lda == white.test$quality)
 
+## try multilayer percpetron ensemble got 1042 T and 798 F == 56%
+M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
+        residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
+        sulphates + alcohol +free.sulfur.dioxide,data=white,model="mlpe",search="heuristic")
+P=predict(M,white.test) 
+P
+white.test$pred.mlpe<-round(P)
 
-install.packages("mda")
-library(mda)
+sum(white.test$pred.mlpe == white.test$quality)
+table(white.test$pred.mlpe == white.test$quality)
+##try sv got 1012 T and 828 F 
+##Random forest got 1034T vs 806 F
+library(randomForest)
 M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
         residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
         sulphates + alcohol +free.sulfur.dioxide,data=white,model="randomForest",search="heuristic")
-P=predict(M,white.test) # P should be negative...
+P=predict(M,white.test) 
+P
+white.test$pred.randfor<-round(P)
 
-white.test$predict1<-round(P)
-
-sum(white.test$predict1 == white.test$quality)
-table(white.test$predict1 == white.test$quality)
+sum(white.test$pred.randfor == white.test$quality)
+table(white.test$pred.randfor == white.test$quality)
 
 ## knn wins
+
+head(white.test)
+###compare to ordinal regression
+if(require(MASS)) { ## dropterm, stepAIC, 
+  or1 <- polr(as.factor(quality)~fixed.acidity + volatile.acidity + citric.acid + 
+                residual.sugar + chlorides + total.sulfur.dioxide + density +   pH +
+                sulphates + alcohol + free.sulfur.dioxide, data = white)
+  dropterm(m1, test = "Chi")
+  or3<- stepAIC(or1)
+  summary(or3)
+}
+predict(or3,  white[1:10,])
+predict(or3,  white.test)
+
+white.test$pred.or<-predict(or3,  newdata = white.test)
+table(white.test$pred.or== white.test$quality) #981 T vs 859 F
+head(white.test)
+write.csv(white.test,"/Users/Babydoll/Documents/BigData/wine-st599/data/white.test.csv")
