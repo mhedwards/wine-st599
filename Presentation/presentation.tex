@@ -1,9 +1,18 @@
 \documentclass{beamer}
 
+\definecolor{OSUdkbrn}{RGB}{104,80,64}
+\definecolor{OSUmedbrn}{RGB}{176,96,16}
+\definecolor{OSUltbrn}{RGB}{224,195,152}
+% from: http://oregonstate.edu/brand/color-palette
+
 \mode<presentation>
 {
-\usetheme{Frankfurt}
-\setbeamercovered{transparent}
+	\usetheme{CambridgeUS}
+	\setbeamercovered{transparent}
+	\setbeamertemplate{footline}[page number]{}
+	\setbeamercolor{palette tertiary}{fg=white, bg=OSUdkbrn}
+	\setbeamercolor{title}{fg=OSUdkbrn}
+	\setbeamercolor{frametitle}{fg=OSUdkbrn}
 }
 
 \title{Predicting Wine Quality: A Conundrum}
@@ -13,18 +22,18 @@
 
 \begin{document}
 \begin{frame}
-\titlepage
+	\titlepage
 \end{frame}
 
 \begin{frame}
-\frametitle{Outline}
-\tableofcontents
+	\frametitle{Outline}
+	\tableofcontents
 \end{frame}
 
 % -------------------------------- INTRODUCTION --------------------------------------------------
 \section{Introduction}
 \begin{frame}{Task}
-\textbf{Predict} the blind taster quality score of a wine based on chemical tests.
+	\textbf{Predict} the blind taster quality score of a wine based on chemical tests.
 
 \end{frame}
 
@@ -40,7 +49,7 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Quality}
+\begin{frame}{White Wine Quality Scores}
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{../images/white_hist.pdf}
@@ -51,7 +60,7 @@
 \section{Machine Learning Methods}
 \begin{frame}{Training and Testing Sets}
 	\begin{itemize}
-	\item Training and Testing set constructed through stratified sampling.
+	\item Training and Testing sets constructed through stratified sampling.
 	\item[]
 	\item Quality variable was the strata
 	\item[]
