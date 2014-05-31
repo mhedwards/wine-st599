@@ -33,6 +33,7 @@
 % -------------------------------- INTRODUCTION --------------------------------------------------
 \section{Introduction}
 \begin{frame}{Task}
+	\LARGE
 	\textbf{Predict} the blind taster quality score of a wine based on chemical tests.
 
 \end{frame}
@@ -43,9 +44,19 @@
 	\item[]
 	\item 1599 \& 4898 rows, respectively
 	\item[]
+	\item Concentrated on White Wine, due to more data
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Data}
+\begin{itemize}
+	
 	\item 11 Explanatory variables: measurements from various phytochemicals in wine
 	\item[]
 	\item Response variable "quality" is discrete variable on ordered scale from 0 (worst) to 10 (best)
+	\item[]
+	\item Nothing graded as 0, 1, 2, or 10	
 \end{itemize}
 \end{frame}
 
@@ -58,6 +69,14 @@
 
 % -------------------------------- MACHINE LEARNING METHODS --------------------------------------------------
 \section{Machine Learning Methods}
+
+\begin{frame}{Learning about Wine}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/gradient.jpg}
+	\end{figure}
+\end{frame}
+
 \begin{frame}{Training and Testing Sets}
 	\begin{itemize}
 	\item Training and Testing sets constructed through stratified sampling.
@@ -70,36 +89,54 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Multiple Linear Regression}
-
-
-\begin{enumerate}
-\item 
-\end{enumerate}
-Multiple Linear Regression
-K-Nearest Neighbor Regression
-
-Model selection, forward/backward, all gave same model. 
-
-
+\begin{frame}{Regression}
+	\begin{itemize}
+	\item With "prediction" as the goal, we think regression.
+	\item[]
+	\item Forward, Backward and Subset Model Selection done, all resulted in same model.
+	\item[]
+	\item 
+	
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{K-Means Regression}
-Multiple Linear Regression
-K-Nearest Neighbor Regression
-
-Model selection, forward/backward, all gave same model. 
 
 
+\begin{frame}{K-Nearest Neighbor Regression}
+	\begin{itemize}
+	\item using some measure of distance, find nearest neighbors in dataset
+	\item[]
+	\item Order examples by increasing distance
+	\item[]
+	\item Find a ``optimal'' number $k$ of nearest neighbors
+	\item[]
+	\item Calculate an inverse distance weighted average with the $k$-nearest multivariate neighbors
+	\item[]
+	\item Used \texttt{rminer} package in R. Offers many regression types 
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Ordinal Regression}
+	Also ``Ordered Logistic'' or ``Probit'' Regression
+	\begin{itemize}
+	\item using some measure of distance, find nearest neighbors in dataset
+	\item[]
+	\item Order examples by increasing distance
+	\item[]
+	\item Find a ``optimal'' number $k$ of nearest neighbors
+	\item[]
+	\item Calculate an inverse distance weighted average with the $k$-nearest multivariate neighbors
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Classification}
-Logistic regression used as classifcation to predict category 
-
-Split data into 3 sets: Training, Cross-Validation, Test Set - completely new. 
-
-polynomial logisitc regression, fit 4 degree poly nomial model, fit a shrink parameter tried 12 to avoid overfitting. estimated the training set error, picked the best and tried it on the cross validation set. then used that parameter to predict with the test set. 
-
+	Logistic regression used as classifcation to predict category 
+	
+	Split data into 3 sets: Training, Cross-Validation, Test Set - completely new. 
+	
+	polynomial logisitc regression, fit 4 degree poly nomial model, fit a shrink parameter tried 12 to avoid overfitting. estimated the training set error, picked the best and tried it on the cross validation set. then used that parameter to predict with the test set. 
+	
 
 \end{frame}
 
@@ -120,13 +157,70 @@ polynomial logisitc regression, fit 4 degree poly nomial model, fit a shrink par
 
 % -------------------------------- FINDINGS --------------------------------------------------
 \section{Findings}
+\begin{frame}{Results}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/matching.jpg}
+	\end{figure}
+\end{frame}
 
-\begin{frame}{Regression: 60\% Success Rate}
-content... change success rate in title
 
 
-todo: graphic for kmeans and multiple or ordinal regression
+\begin{frame}{K Nearest Neighbors Regression: 59.6\% Success Rate}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/KNNRegression_Results.pdf}
+	\end{figure}
 
+\end{frame}
+
+
+\begin{frame}{Ordinal Regression: 53.3\% Success Rate}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/OrdinalRegression_Results.pdf}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}{Regression Summary}
+	\begin{itemize}
+	\item K Nearest Neighbors
+	\begin{itemize}
+		\item[]
+		\item Overall 59.6\% success rate.
+		\item[]
+		\item No properly allocated 3s or 9s
+	\end{itemize}
+	\item[]
+	\item Ordinal Regression
+	\begin{itemize}
+		\item[]	
+		\item Overall 53.3\% success rate
+		\item[]		
+		\item No properly allocated 3s, 8s or 9s.
+	\end{itemize}
+	
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Regression: Success by Quality Predicted}
+\begin{center}
+
+\begin{tabular}{c | r r | r r | c}
+	           & \multicolumn{2}{c|}{KNN} & \multicolumn{2}{c|}{Ord} &  \\ \hline
+	Prediction & \% Match & \% Fail       & \% Match & \% Fail      & \# Present \\ \hline
+	    3      & n/a      & n/a           & 0\%      & 100\%        & 8         \\
+	    4      & 40.0\%   & 60.0\%        & 100\%    & 0\%          & 62        \\
+	    5      & 59.8\%   & 40.2\%        & 57.4\%   & 42.6\%       & 547       \\
+	    6      & 62.1\%   & 37.9\%        & 52.0\%   & 48.0\%       & 825       \\
+	    7      & 55.7\%   & 44.3\%        & 50.6\%   & 49.4\%       & 330       \\
+	    8      & 48.8\%   & 51.2\%        & n/a      & n/a          & 66        \\
+	    9      & n/a      & n/a           & n/a      & n/a          & 2
+\end{tabular}
+Success by predicted quality. `N/A' means nothing predicted at that quality.
+\end{center}
 \end{frame}
 
 \begin{frame}{Classification: 50\% Success Rate}
@@ -145,6 +239,15 @@ content... change success rate in title
 
 % -------------------------------- DISCUSSION --------------------------------------------------
 \section{Discussion}
+\begin{frame}{Discussion}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/wines.jpg}
+	\end{figure}
+\end{frame}
+
+
+
 \begin{frame}{}
 Cross Validation
 
@@ -155,5 +258,15 @@ ordered categories - assumption about ordering of categories has some repercussi
 
 Ordinal Regression: proportional odds - coefficients stay the same, and the intercept value changes. all explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
 
+knn - if category distribution is skewed, larger categories can dominate, which is what we see in our results.
+
 \end{frame}
+
+\begin{frame}{Questions}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/cheese.jpg}
+	\end{figure}
+\end{frame}
+
 \end{document}
