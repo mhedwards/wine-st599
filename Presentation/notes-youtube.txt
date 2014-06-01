@@ -1,0 +1,30 @@
+http://www.youtube.com/watch?v=p5rTio1G4ys
+
+
+Multiclass classification
+
+One-vs-all (one-vs-rest)
+
+response takes on small # of discrete values
+
+
+treat class "x" as positive class, everything else as negative class
+repeat for all classes
+
+fit three classifiers
+h_theta ^ i(x) = P(y=i| x; theta); i = 1,2,3...
+
+train logisit regression clasifier h_theta ^ i(x)  for each class i to predict the probability that y=i.
+
+
+on new pinput x, to make a prediction, pick the class i that maximises max(over i) h_theta ^ i(x)  highest probability, we then predict y to be that value.
+
+
+
+Discussion
+
+Assumptions
+
+Limitations
+
+Scalability

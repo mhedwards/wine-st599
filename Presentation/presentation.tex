@@ -25,13 +25,22 @@
 	\titlepage
 \end{frame}
 
-\begin{frame}
-	\frametitle{Outline}
-	\tableofcontents
-\end{frame}
+%\begin{frame}
+%	\frametitle{Outline}
+%	\tableofcontents
+%\end{frame}
 
 % -------------------------------- INTRODUCTION --------------------------------------------------
 \section{Introduction}
+
+\begin{frame}{Learning about Wine}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/uncork.jpg}
+	\end{figure}
+\end{frame}
+
+
 \begin{frame}{Task}
 	\LARGE
 	\textbf{Predict} the blind taster quality score of a wine based on chemical tests.
@@ -106,7 +115,7 @@
 
 \begin{frame}{K-Nearest Neighbor Regression}
 	\begin{itemize}
-	\item using some measure of distance, find nearest neighbors in dataset
+	\item Using some measure of distance, find nearest neighbors in dataset
 	\item[]
 	\item Order examples by increasing distance
 	\item[]
@@ -114,7 +123,7 @@
 	\item[]
 	\item Calculate an inverse distance weighted average with the $k$-nearest multivariate neighbors
 	\item[]
-	\item Used \texttt{rminer} package in R. Offers many regression types 
+	\item Used \texttt{fit} function from \texttt{rminer} package in R. Offers many regression types 
 	\end{itemize}
 \end{frame}
 
@@ -122,24 +131,31 @@
 \begin{frame}{Ordinal Regression}
 	Also ``Ordered Logistic'' or ``Probit'' Regression
 	\begin{itemize}
-	\item using some measure of distance, find nearest neighbors in dataset
+	\item Proportional odds - coefficients stay the same, and the intercept value changes. all explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
 	\item[]
-	\item Order examples by increasing distance
+	\item blah
 	\item[]
-	\item Find a ``optimal'' number $k$ of nearest neighbors
+	\item blah
 	\item[]
-	\item Calculate an inverse distance weighted average with the $k$-nearest multivariate neighbors
+	\item blah
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Classification}
-	Logistic regression used as classifcation to predict category 
-	
-	Split data into 3 sets: Training, Cross-Validation, Test Set - completely new. 
-	
-	polynomial logisitc regression, fit 4 degree poly nomial model, fit a shrink parameter tried 12 to avoid overfitting. estimated the training set error, picked the best and tried it on the cross validation set. then used that parameter to predict with the test set. 
-	
+\begin{frame}{Multiclass Classification}
+	One-vs-All (or One-vs-Rest) Algorithm
+	\begin{itemize}
+	\item Split data into training, cross-validation and test sets.
+	\item[]
+	\item Split problem into $n$ binary classification problems, where $n$ is number of classes.
+	\item[]
+	\item Treat class $i$ as "positive" class, everything else as "negative" class
+	\item[]
+	\item Train logistic regression classifier $h_{\theta}^{i}(x)$ for each class $i$ to predict the probability that $y=i$
+	\item[]
+	\item On new input $x$, evaluate $\max_{i}h_{\theta}^{i}(x)$, so whichever class has the highest probability based on our input, we then predict $\hat{y}$ to be in that class
+	\end{itemize}
 
+%Logistic regression used as classifcation to predict category
 \end{frame}
 
 \begin{frame}{Random Randomness is Random}
@@ -207,35 +223,66 @@
 
 \end{frame}
 
-\begin{frame}{Regression: Success by Quality Predicted}
-\begin{center}
+%\begin{frame}{Regression: Success by Quality Predicted}
+%\begin{center}
+%
+%\begin{tabular}{c | r r | r r | c}
+%	           & \multicolumn{2}{c|}{KNN} & \multicolumn{2}{c|}{Ord} &  \\ \hline
+%	Prediction & \% Match & \% Fail       & \% Match & \% Fail      & \# Present \\ \hline
+%	    3      & n/a      & n/a           & 0\%      & 100\%        & 8         \\
+%	    4      & 40.0\%   & 60.0\%        & 100\%    & 0\%          & 62        \\
+%	    5      & 59.8\%   & 40.2\%        & 57.4\%   & 42.6\%       & 547       \\
+%	    6      & 62.1\%   & 37.9\%        & 52.0\%   & 48.0\%       & 825       \\
+%	    7      & 55.7\%   & 44.3\%        & 50.6\%   & 49.4\%       & 330       \\
+%	    8      & 48.8\%   & 51.2\%        & n/a      & n/a          & 66        \\
+%	    9      & n/a      & n/a           & n/a      & n/a          & 2
+%\end{tabular}
+%Success by predicted quality. `N/A' means nothing predicted at that quality.
+%\end{center}
+%\end{frame}
 
-\begin{tabular}{c | r r | r r | c}
-	           & \multicolumn{2}{c|}{KNN} & \multicolumn{2}{c|}{Ord} &  \\ \hline
-	Prediction & \% Match & \% Fail       & \% Match & \% Fail      & \# Present \\ \hline
-	    3      & n/a      & n/a           & 0\%      & 100\%        & 8         \\
-	    4      & 40.0\%   & 60.0\%        & 100\%    & 0\%          & 62        \\
-	    5      & 59.8\%   & 40.2\%        & 57.4\%   & 42.6\%       & 547       \\
-	    6      & 62.1\%   & 37.9\%        & 52.0\%   & 48.0\%       & 825       \\
-	    7      & 55.7\%   & 44.3\%        & 50.6\%   & 49.4\%       & 330       \\
-	    8      & 48.8\%   & 51.2\%        & n/a      & n/a          & 66        \\
-	    9      & n/a      & n/a           & n/a      & n/a          & 2
-\end{tabular}
-Success by predicted quality. `N/A' means nothing predicted at that quality.
-\end{center}
+
+
+
+\begin{frame}{Classification: 54.4\% Success Rate}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/Classification_Results.pdf}
+	\end{figure}
 \end{frame}
 
-\begin{frame}{Classification: 50\% Success Rate}
-content... change success rate in title
+\begin{frame}{Classification Summary}
+	\begin{itemize}
+	\item 54.4\% success rate
+	\item[]
+	\item No properly allocated 3s or 9s
+	\end{itemize}
 \end{frame}
 
+\begin{frame}{Comparison: Success by Quality Predicted}
+	\begin{center}
+	
+	\begin{tabular}{c | r r | r r | r r|}
+		           & \multicolumn{2}{c|}{KNN} & \multicolumn{2}{c|}{Ordinal} & \multicolumn{2}{c|}{Classification}          \\ \hline
+		Prediction & \% Match & \% Fail       & \% Match & \% Fail       & \% Match & \% Fail       \\ \hline
+		    3      & n/a      & n/a           & 0\%      & 100\%         & n/a      & n/a           \\
+		    4      & 40.0\%   & 60.0\%        & 100\%    & 0\%           & 75.0\%   & 25.0\%        \\
+		    5      & 59.8\%   & 40.2\%        & 57.4\%   & 42.6\%        & 59.5\%   & 40.5\%        \\
+		    6      & 62.1\%   & 37.9\%        & 52.0\%   & 48.0\%        & 52.3\%   & 47.7\%        \\
+		    7      & 55.7\%   & 44.3\%        & 50.6\%   & 49.4\%        & 52.1\%   & 47.9\%        \\
+		    8      & 48.8\%   & 51.2\%        & n/a      & n/a           & 0\%      & 100\%         \\
+		    9      & n/a      & n/a           & n/a      & n/a           & n/a      & n/a           \end{tabular}
+	
+	\end{center}
+	`N/A' means nothing predicted at that quality.
+\end{frame}
 
 \begin{frame}{Random 'Prediction': 39.67\% Success Rate}
-	Turns out, that's not really a great 'prediction' method. Who knew?
 	\begin{figure}
 		\centering
 		\includegraphics[width=\textwidth]{../images/RandomPrediction.pdf}
 	\end{figure}
+	Turns out, that's not really a great 'prediction' method. Who knew?
 \end{frame}
 
 
@@ -248,20 +295,34 @@ content... change success rate in title
 	\end{figure}
 \end{frame}
 
+\begin{frame}{One-vs-All Classification}
+	\begin{itemize}
+	\item 
+	\end{itemize}
+
+\end{frame}
 
 
-\begin{frame}{}
-Cross Validation
+\begin{frame}{Regression: Assumptions}
+	\begin{itemize}
+	\item Multicollinearity is not an issue with prediction
+	\item[]
+	\item Ordinal Regression: assumption about ordering of categories has some repercussions
+	\item[]
+	\item K-Neighbors: Options available for the ``search method'' for KNN algorithm were not explored. This changes how the hyper-parameters of the algorithm are tuned.
+	\item[]
+	\item Cross validation was not explored.
+	\end{itemize}
+\end{frame}
 
-Search method for \texttt{knn}
-
-Ordinal Regression - must assume that 
-ordered categories - assumption about ordering of categories has some repercussions.
-
-Ordinal Regression: proportional odds - coefficients stay the same, and the intercept value changes. all explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
-
-knn - if category distribution is skewed, larger categories can dominate, which is what we see in our results.
-
+\begin{frame}{Regression:Limitations and Scaling}
+	\begin{itemize}
+	\item K-Neighbors: if category distribution is skewed, larger categories can dominate, which is what we see in our results.
+	\item[]
+	\item Regression does not always scale well, adding covariates can bog down the number of comparisons, especially with model selection
+	\item[]
+	\item Random or stratified sampling of data to get a reasonable set size could help.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Questions}
