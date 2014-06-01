@@ -128,15 +128,13 @@
 
 
 \begin{frame}{Ordinal Regression}
-	Also ``Ordered Logistic'' or ``Probit'' Regression
+	Also ``Ordered Logistic'' Regression
 	\begin{itemize}
-	\item Proportional odds - coefficients stay the same, and the intercept value changes. all explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
+	\item Estimate seperate binary regression models for all of: $P(score\leq j)/P(score>j)$, for all $j$
 	\item[]
-	\item blah
+	\item To get the probability of the score being $j$: $P(Score=j)=P(score\leq j) - P(score < j)$
 	\item[]
-	\item blah
-	\item[]
-	\item blah
+	\item So we can get the probability of each category.
 	\end{itemize}
 \end{frame}
 
@@ -294,23 +292,59 @@
 	\end{figure}
 \end{frame}
 
-\begin{frame}{One-vs-All Classification}
+\begin{frame}{One-vs-All Classification: Assumptions}
 	\begin{itemize}
-	\item 
+	\item Need 3 data sets if doing Model Selection. 
+	\item[]
+	\item Assumes that the the individual log reg are indepent--meaning that the probability of all categories do not sum to one. 
+	\item[]
+	\item Approach assumes that the category with higher prob is more likely to occur that other categories
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{One-vs-All Classification: Limitations}
+	\begin{itemize}
+
+	 \item When two or more categories have the same probability of success, then the approach will just pick one. 
+	 \item[]
+	 \item The algorithm is computationally expensive. Ran in about 3 mins for this data set.
+	 \item[]
+	 \item Scalability is an issue for the algorithm, larger data sets could cause issues.
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Cross-Validation}
+Lambda is tuning parameter for model. Want to pick the lambda with the lowest cross-validation. 
+
+	\begin{figure}
+		\centering
+		\includegraphics[scale=0.5]{../Kalbi/validationcurve.pdf}
+	\end{figure}
 
 \end{frame}
 
 
 \begin{frame}{Regression: Assumptions}
 	\begin{itemize}
-	\item Multicollinearity is not an issue with prediction
-	\item[]
-	\item Ordinal Regression: assumption about ordering of categories has some repercussions
+	\item Multicollinearity is not an issue with prediction. It blows up SE, which is bad for estimation, not so bad with prediction.
 	\item[]
 	\item K-Neighbors: Options available for the ``search method'' for KNN algorithm were not explored. This changes how the hyper-parameters of the algorithm are tuned.
 	\item[]
 	\item Cross validation was not explored.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Ordinal Regression Assumptions}
+	Also ``Ordered Logistic'' Regression
+	\begin{itemize}
+	\item Because it is likelihood based, need to have ``enough'' data for modeling.
+	\item[]
+	\item Proportional odds - coefficients stay the same, and the intercept value changes. Need to verify. Did not do it.
+	\item[]
+	\item To verify, would run each category independently, verifying slopes are the same.
+	\item[]
+	\item All explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
 	\end{itemize}
 \end{frame}
 
@@ -320,7 +354,7 @@
 	\item[]
 	\item Regression does not always scale well, adding covariates can bog down the number of comparisons, especially with model selection
 	\item[]
-	\item Random or stratified sampling of data to get a reasonable set size could help.
+	\item Random or stratified sampling of data to get a reasonable set size and model selection to cut down number of covariates could help.
 	\end{itemize}
 \end{frame}
 
