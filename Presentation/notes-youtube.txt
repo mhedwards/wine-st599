@@ -21,10 +21,3 @@ on new pinput x, to make a prediction, pick the class i that maximises max(over 
 
 
 
-Discussion
-
-Assumptions
-
-Limitations
-
-Scalability
