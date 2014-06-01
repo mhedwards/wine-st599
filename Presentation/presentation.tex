@@ -1,0 +1,274 @@
+\documentclass{beamer}
+
+\definecolor{OSUdkbrn}{RGB}{104,80,64}
+\definecolor{OSUmedbrn}{RGB}{176,96,16}
+\definecolor{OSUltbrn}{RGB}{224,195,152}
+% from: http://oregonstate.edu/brand/color-palette
+
+\mode<presentation>
+{
+	\usetheme{CambridgeUS}
+	\setbeamercovered{transparent}
+	\setbeamertemplate{footline}[page number]{}
+	\setbeamercolor{palette tertiary}{fg=white, bg=OSUdkbrn}
+	\setbeamercolor{title}{fg=OSUdkbrn}
+	\setbeamercolor{frametitle}{fg=OSUdkbrn}
+}
+
+\title{Predicting Wine Quality: A Conundrum}
+\subtitle{Would you like some cheese with that?}
+\author{Kalbi Zongo, Song Hoa Choi, Gina Shellhammer, Matt Edwards}
+\date{June 2, 2014}
+
+\begin{document}
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+% -------------------------------- INTRODUCTION --------------------------------------------------
+\section{Introduction}
+\begin{frame}{Task}
+	\LARGE
+	\textbf{Predict} the blind taster quality score of a wine based on chemical tests.
+
+\end{frame}
+
+\begin{frame}{Data}
+\begin{itemize}
+	\item Two Datasets: Red \& White vinho verde wine samples from northern Portugal
+	\item[]
+	\item 1599 \& 4898 rows, respectively
+	\item[]
+	\item Concentrated on White Wine, due to more data
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Data}
+\begin{itemize}
+	
+	\item 11 Explanatory variables: measurements from various phytochemicals in wine
+	\item[]
+	\item Response variable "quality" is discrete variable on ordered scale from 0 (worst) to 10 (best)
+	\item[]
+	\item Nothing graded as 0, 1, 2, or 10	
+\end{itemize}
+\end{frame}
+
+\begin{frame}{White Wine Quality Scores}
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{../images/white_hist.pdf}
+\end{figure}
+\end{frame}
+
+% -------------------------------- MACHINE LEARNING METHODS --------------------------------------------------
+\section{Machine Learning Methods}
+
+\begin{frame}{Learning about Wine}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/gradient.jpg}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Training and Testing Sets}
+	\begin{itemize}
+	\item Training and Testing sets constructed through stratified sampling.
+	\item[]
+	\item Quality variable was the strata
+	\item[]
+	\item Why: Ensure representation of all quality categories in both Training \& Testing datasets.
+	\item[]
+	\item How: 37.5\% of items (rounded up) in strata were randomly selected to be in the testing set. Remaining 62.5\% were the training set.
+	\item[]
+	\item Regression and Random method used these training sets, Classification used different set.	
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Regression}
+	\begin{itemize}
+	\item With "prediction" as the goal, we think regression.
+	\item[]
+	\item Forward, Backward and Subset Model Selection done, all resulted in same model.
+	\item[]
+	\item 
+	
+	\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{K-Nearest Neighbor Regression}
+	\begin{itemize}
+	\item using some measure of distance, find nearest neighbors in dataset
+	\item[]
+	\item Order examples by increasing distance
+	\item[]
+	\item Find a ``optimal'' number $k$ of nearest neighbors
+	\item[]
+	\item Calculate an inverse distance weighted average with the $k$-nearest multivariate neighbors
+	\item[]
+	\item Used \texttt{rminer} package in R. Offers many regression types 
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Ordinal Regression}
+	Also ``Ordered Logistic'' or ``Probit'' Regression
+	\begin{itemize}
+	\item using some measure of distance, find nearest neighbors in dataset
+	\item[]
+	\item Order examples by increasing distance
+	\item[]
+	\item Find a ``optimal'' number $k$ of nearest neighbors
+	\item[]
+	\item Calculate an inverse distance weighted average with the $k$-nearest multivariate neighbors
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Classification}
+	Logistic regression used as classifcation to predict category 
+	
+	Split data into 3 sets: Training, Cross-Validation, Test Set - completely new. 
+	
+	polynomial logisitc regression, fit 4 degree poly nomial model, fit a shrink parameter tried 12 to avoid overfitting. estimated the training set error, picked the best and tried it on the cross validation set. then used that parameter to predict with the test set. 
+	
+
+\end{frame}
+
+\begin{frame}{Random Randomness is Random}
+	\begin{itemize}
+	\item 75\% of Quality ratings were either 5 or 6. 
+	\item[]
+	\item Is randomly assigning 5 or 6 to everything as good as, or better than, our other methods?
+	\item[]
+	\item Using \texttt{rbinom(1,1,0.6014)}, 1s were predicted as quality 6, 0s as quality 5
+	\item[]
+	\item Probability of 60.14\% because from Training Set, considering only 5s and 6s, 6s were 60.14\% of total observations
+	\item[]
+	\item Our base line success rate to compare other methods.
+	\end{itemize}
+\end{frame}
+
+
+% -------------------------------- FINDINGS --------------------------------------------------
+\section{Findings}
+\begin{frame}{Results}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/matching.jpg}
+	\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{K Nearest Neighbors Regression: 59.6\% Success Rate}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/KNNRegression_Results.pdf}
+	\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{Ordinal Regression: 53.3\% Success Rate}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/OrdinalRegression_Results.pdf}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}{Regression Summary}
+	\begin{itemize}
+	\item K Nearest Neighbors
+	\begin{itemize}
+		\item[]
+		\item Overall 59.6\% success rate.
+		\item[]
+		\item No properly allocated 3s or 9s
+	\end{itemize}
+	\item[]
+	\item Ordinal Regression
+	\begin{itemize}
+		\item[]	
+		\item Overall 53.3\% success rate
+		\item[]		
+		\item No properly allocated 3s, 8s or 9s.
+	\end{itemize}
+	
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Regression: Success by Quality Predicted}
+\begin{center}
+
+\begin{tabular}{c | r r | r r | c}
+	           & \multicolumn{2}{c|}{KNN} & \multicolumn{2}{c|}{Ord} &  \\ \hline
+	Prediction & \% Match & \% Fail       & \% Match & \% Fail      & \# Present \\ \hline
+	    3      & n/a      & n/a           & 0\%      & 100\%        & 8         \\
+	    4      & 40.0\%   & 60.0\%        & 100\%    & 0\%          & 62        \\
+	    5      & 59.8\%   & 40.2\%        & 57.4\%   & 42.6\%       & 547       \\
+	    6      & 62.1\%   & 37.9\%        & 52.0\%   & 48.0\%       & 825       \\
+	    7      & 55.7\%   & 44.3\%        & 50.6\%   & 49.4\%       & 330       \\
+	    8      & 48.8\%   & 51.2\%        & n/a      & n/a          & 66        \\
+	    9      & n/a      & n/a           & n/a      & n/a          & 2
+\end{tabular}
+Success by predicted quality. `N/A' means nothing predicted at that quality.
+\end{center}
+\end{frame}
+
+\begin{frame}{Classification: 50\% Success Rate}
+content... change success rate in title
+\end{frame}
+
+
+\begin{frame}{Random 'Prediction': 39.67\% Success Rate}
+	Turns out, that's not really a great 'prediction' method. Who knew?
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/RandomPrediction.pdf}
+	\end{figure}
+\end{frame}
+
+
+% -------------------------------- DISCUSSION --------------------------------------------------
+\section{Discussion}
+\begin{frame}{Discussion}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/wines.jpg}
+	\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{}
+Cross Validation
+
+Search method for \texttt{knn}
+
+Ordinal Regression - must assume that 
+ordered categories - assumption about ordering of categories has some repercussions.
+
+Ordinal Regression: proportional odds - coefficients stay the same, and the intercept value changes. all explanatory variables have the same weight for all categories. Puts them in possible categories, picks the one with the highest probability. 
+
+knn - if category distribution is skewed, larger categories can dominate, which is what we see in our results.
+
+\end{frame}
+
+\begin{frame}{Questions}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../images/cheese.jpg}
+	\end{figure}
+\end{frame}
+
+\end{document}
