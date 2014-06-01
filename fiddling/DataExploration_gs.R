@@ -105,7 +105,7 @@ if(require(MASS)) { ## dropterm, stepAIC,
   or3<- stepAIC(or1)
   summary(or3)
 }
-predict(or3,  white[1:10,])
+predict(or3, white[1:10,])
 predict(or3,  white.test)
 
 white.test$predict.or<-predict(or3,  newdata = white.test)

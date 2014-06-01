@@ -102,7 +102,7 @@ library(rminer)
 
 M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
         residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
-        sulphates + alcohol +free.sulfur.dioxide,data=white,model="knn",search="heuristic")
+        sulphates + alcohol +free.sulfur.dioxide,data=white,model="knn",task = "c", search="heuristic")
 P=predict(M,white.test) 
 P
 white.test$pred.knn<-round(P)
@@ -123,6 +123,7 @@ sum(white.test$pred.lda == white.test$quality)
 table(white.test$pred.lda == white.test$quality)
 
 ##try multilayer perceptron with one hidden layer got 1035 T and 805 F
+
 M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
         residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
         sulphates + alcohol +free.sulfur.dioxide,data=white,model="mlp",search="heuristic")
@@ -157,6 +158,16 @@ sum(white.test$pred.randfor == white.test$quality)
 table(white.test$pred.randfor == white.test$quality)
 
 ## knn wins
+##SVM = 55%
+M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
+        residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
+        sulphates + alcohol +free.sulfur.dioxide,data=white,model="svm",search="heuristic")
+P=predict(M,white.test) 
+P
+white.test$pred.svm<-round(P)
+
+sum(white.test$pred.svm == white.test$quality)
+table(white.test$pred.svm == white.test$quality)
 
 head(white.test)
 ###compare to ordinal regression
@@ -168,10 +179,23 @@ if(require(MASS)) { ## dropterm, stepAIC,
   or3<- stepAIC(or1)
   summary(or3)
 }
+or3
 predict(or3,  white[1:10,])
 predict(or3,  white.test)
+g<-profile(or3)
+plot(g)
 
 white.test$pred.or<-predict(or3,  newdata = white.test)
 table(white.test$pred.or== white.test$quality) #981 T vs 859 F
 head(white.test)
 write.csv(white.test,"/Users/Babydoll/Documents/BigData/wine-st599/data/white.test.csv")
+####
+M=fit(quality~fixed.acidity+volatile.acidity +citric.acid +
+        residual.sugar + chlorides +total.sulfur.dioxide + density + pH +
+        sulphates + alcohol +free.sulfur.dioxide,data=white,model="knn",task = "r", search="heuristic10")
+P=predict(M,white.test) 
+P
+white.test$pred.knn<-P
+
+sum(white.test$pred.knn == white.test$quality)
+table(white.test$pred.knn == white.test$quality)
