@@ -2,6 +2,10 @@
 library(dplyr)
 library(ggplot2)
 
+OSU.orange <- rgb(243/255,115/255,33/255)
+OSU.dkblue <- rgb(93/255,135/255,161/255)
+OSU.ltblue<- rgb(156/255,197/255,202/255)
+
 white.train <- read.csv("data/whitewine-trainingset.csv", header=T, stringsAsFactors=F)
 
 qual <- white.train$quality
@@ -43,6 +47,8 @@ sum(white.test$match)
 sum(white.test$match)/nrow(white.test)
 # 39.67% Success rate.
 
-ggplot(data=white.test, aes(factor(quality.hat), fill=match))+geom_bar(aes(order=desc(match)), width=0.5)+coord_flip()+xlab("Quality 'Prediction'")+ylab("Count")+theme_bw(18)+ggtitle("Totally Random Prediction")
+white.test <- read.csv("data/results-random-assignment.csv", header=T, stringsAsFactors=F)
+
+ggplot(data=white.test, aes(factor(quality.hat), fill=match))+geom_bar(aes(order=desc(match)), width=0.5)+coord_flip()+xlab("Quality 'Prediction'")+ylab("Count")+theme_bw(18)+ggtitle("Totally Random Prediction")+scale_fill_manual(values=c("TRUE"=OSU.orange, "FALSE"=OSU.ltblue))
 
 ggsave("images/RandomPrediction.pdf", width=8, height=4)

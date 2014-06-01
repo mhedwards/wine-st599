@@ -1,0 +1,15 @@
+NOTES FOR 6/1 MEETING
+
+
+- Need a few more bullet points for Ordinal Regression
+
+
+One-V-All
+- need assumptions
+- need limitations
+- need scalability
+
+Regression
+ - why is multi-coll not an issue?
+ - what repercussions does ordering of categories have?
+
