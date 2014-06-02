@@ -1,0 +1,18 @@
+http://www.strath.ac.uk/aer/materials/5furtherquantitativeresearchdesignandanalysis/unit6/ordinalregression/
+
+
+Ordinal Regression.pdf page # 71, file page 3
+
+
+
+
+
+Regression
+ - why is multi-coll not an issue? - when making estiamtes, it tents to blow up your standard errors, but because you're only predicting, you can kind of ignore it.
+ 
+ 
+ 
+ 
+Classification -
+how do you do model selection - lambda represnets a specific set of criteria that make a model. Teh cross-validation is anaagus to the AIC, you pick the model with the lowest cross-validation error
+Training set error is artificially low.
