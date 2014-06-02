@@ -10,6 +10,7 @@ One-V-All
 - need scalability
 
 Regression
- - why is multi-coll not an issue?
- - what repercussions does ordering of categories have?
+ - why is multi-coll not an issue? - when making estiamtes, it tents to blow up your standard errors, but because you're only predicting, you can kind of ignore it. 
+
+ - what repercussions does ordering of categories have? - the intercept/slope thing
 
