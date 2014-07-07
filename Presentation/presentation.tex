@@ -61,7 +61,7 @@
 \begin{frame}{Data}
 \begin{itemize}
 	
-	\item 11 Explanatory variables: measurements from various physiochemical in wine
+	\item 11 Explanatory variables: measurements from various physiochemicals in wine
 	\item[]
 	\item Response variable ``quality'' is discrete variable on ordered scale from 0 (worst) to 10 (best)
 	\item[]
@@ -96,7 +96,7 @@
 	\item[]
 	\item How: 37.5\% of items (rounded up) in strata were randomly selected to be in the testing set. Remaining 62.5\% were the training set.
 	\item[]
-	\item Regression and Random method used these training sets, Classification used different set.	
+	\item Regression and Random method used these training sets, Classification used different sets.	
 	\end{itemize}
 \end{frame}
 
@@ -112,7 +112,7 @@
 
 
 
-\begin{frame}{K-Nearest Neighbor Regression}
+\begin{frame}{K-Nearest Neighbors Regression}
 	\begin{itemize}
 	\item Using some measure of distance, find nearest neighbors in dataset
 	\item[]
@@ -129,10 +129,12 @@
 
 \begin{frame}{Ordinal Regression}
 	Also ``Ordered Logistic'' Regression
+	
+	
 	\begin{itemize}
-	\item Estimate seperate binary regression models for all of: $P(score\leq j)/P(score>j)$, for all $j$
+	\item Estimate seperate binary regression models for all of: $P(score\leq j)/P(score>j)$, for all $j$ classes
 	\item[]
-	\item To get the probability of the score being $j$: $P(Score=j)=P(score\leq j) - P(score < j)$
+	\item To get the probability of the score being in class $j$: $P(Score=j)=P(score\leq j) - P(score < j)$
 	\item[]
 	\item So we can get the probability of each category.
 	\end{itemize}
